@@ -13,9 +13,9 @@ func onMessage(sess *discordgo.Session, m *discordgo.MessageCreate) {
 	screwyHash := BytesHash([]byte(m.Content))
 	screwyHash.Sub(screwyHash, big.NewInt(28)).Mod(screwyHash, big.NewInt(150))
 	if screwyHash.Cmp(big.NewInt(0)) == 0 {
-		r, err := os.Open("screwed.png")
+		r, err := os.Open("assets/images/screwed.png")
 		if err != nil {
-			log.Println("Error opening screwed.png: " + err.Error())
+			log.Println("Error opening assets/images/screwed.png: " + err.Error())
 			return
 		}
 		defer r.Close()

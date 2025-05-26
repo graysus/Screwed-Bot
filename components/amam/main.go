@@ -36,9 +36,6 @@ var AMAMTYPES = []AmAmType{
 	},
 }
 
-/*
- */
-
 func onMessage(sess *discordgo.Session, m *discordgo.MessageCreate) {
 	lowered := strings.ToLower(m.Content)
 	for _, amam := range AMAMTYPES {
