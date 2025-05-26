@@ -6,7 +6,9 @@ import (
 	"main/botsession"
 	"main/components/amam"
 	"main/components/developer"
+	"main/components/highranks"
 	"main/components/randomscrewed"
+	"main/components/screwedcar"
 	"main/components/screwedreply"
 	"os"
 	"os/signal"
@@ -46,5 +48,11 @@ func main() {
 }
 
 func Init(sess *botsession.BotSession) {
-	sess.Load(randomscrewed.Init, screwedreply.Init, developer.Init, amam.Init)
+	sess.Load(
+		randomscrewed.Init,
+		screwedreply.Init,
+		developer.Init,
+		amam.Init,
+		highranks.Init,
+		screwedcar.Init)
 }
