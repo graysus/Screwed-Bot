@@ -8,7 +8,7 @@ import (
 	"main/components/developer"
 	"main/components/highranks"
 	"main/components/randomscrewed"
-	"main/components/screwedcar"
+	"main/components/responder"
 	"main/components/screwedreply"
 	"os"
 	"os/signal"
@@ -54,5 +54,5 @@ func Init(sess *botsession.BotSession) {
 		developer.Init,
 		amam.Init,
 		highranks.Init,
-		screwedcar.Init)
+		responder.Init)
 }
