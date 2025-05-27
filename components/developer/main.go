@@ -1,6 +1,7 @@
 package developer
 
 import (
+	"fmt"
 	"main/botsession"
 	"strings"
 
@@ -22,12 +23,9 @@ func onMessage(sess *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func devinter(sess *botsession.BotSession, inter *discordgo.Interaction) {
-	sess.S.InteractionRespond(inter, &discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseChannelMessageWithSource,
-		Data: &discordgo.InteractionResponseData{
-			Content: "why does this take so much code to do",
-		},
-	})
+	if err := sess.RespondWithMessage(inter, "among us"); err != nil {
+		fmt.Println("Failure: " + err.Error())
+	}
 }
 
 func Init(sess *botsession.BotSession) {

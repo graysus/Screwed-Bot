@@ -47,6 +47,20 @@ func (bot *BotSession) Load(loaders ...func(s *BotSession)) {
 }
 
 func (bot *BotSession) AddAppCommand(hndl CommandHandler, cmd *discordgo.ApplicationCommand) {
+	if cmd == nil {
+		panic("cmd mustn't be nil")
+	}
 	bot.Handlers[cmd.Name] = hndl
-	bot.S.ApplicationCommandCreate(bot.S.State.User.ID, "", cmd)
+	if _, err := bot.S.ApplicationCommandCreate(bot.S.State.User.ID, "", cmd); err != nil {
+		fmt.Println("Error creating command " + cmd.Name + ": " + err.Error())
+	}
+}
+
+func (bot *BotSession) RespondWithMessage(inter *discordgo.Interaction, content string) error {
+	return bot.S.InteractionRespond(inter, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: content,
+		},
+	})
 }

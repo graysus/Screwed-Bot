@@ -5,6 +5,7 @@ import (
 	"log"
 	"main/botsession"
 	"main/components/amam"
+	"main/components/awesomebutton"
 	"main/components/developer"
 	"main/components/highranks"
 	"main/components/randomscrewed"
@@ -54,5 +55,6 @@ func Init(sess *botsession.BotSession) {
 		developer.Init,
 		amam.Init,
 		highranks.Init,
-		responder.Init)
+		responder.Init,
+		awesomebutton.Init)
 }
