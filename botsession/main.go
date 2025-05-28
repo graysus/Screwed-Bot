@@ -2,6 +2,7 @@ package botsession
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -61,6 +62,20 @@ func (bot *BotSession) RespondWithMessage(inter *discordgo.Interaction, content 
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: content,
+		},
+	})
+}
+
+func (bot *BotSession) RespondWithMessageAttachment(inter *discordgo.Interaction, name string, rdr io.Reader) error {
+	return bot.S.InteractionRespond(inter, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Files: []*discordgo.File{
+				{
+					Name:   name,
+					Reader: rdr,
+				},
+			},
 		},
 	})
 }

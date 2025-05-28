@@ -8,6 +8,7 @@ import (
 	"main/components/awesomebutton"
 	"main/components/developer"
 	"main/components/highranks"
+	"main/components/imagemanipulation"
 	"main/components/randomscrewed"
 	"main/components/responder"
 	"main/components/screwedreply"
@@ -56,5 +57,6 @@ func Init(sess *botsession.BotSession) {
 		amam.Init,
 		highranks.Init,
 		responder.Init,
-		awesomebutton.Init)
+		awesomebutton.Init,
+		imagemanipulation.Init)
 }
