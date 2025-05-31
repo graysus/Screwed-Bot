@@ -180,18 +180,8 @@ func blah(bot *botsession.BotSession, inter *discordgo.Interaction) {
 			x := wand.Clone()
 			x.EvaluateImage(imagick.EVAL_OP_MULTIPLY, float64(curA)/255)
 
-			fmt.Println(curA)
 			wandBase.CompositeImage(x, imagick.COMPOSITE_OP_OVER, true, curX, curY)
 		}
-
-		// intervalX, intervalY = 3, 1
-
-		// stpx, stpy = (708-intervalX*intervals, 249-intervalY*intervals)
-
-		// intervals = 8
-
-		// initialA = 0x20
-		// finalA = 0xA0
 
 		if rdr, err := WriteWandToReader(wandBase); err != nil {
 			fmt.Println("Error writing to reader: " + err.Error())
