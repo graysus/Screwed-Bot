@@ -2,6 +2,7 @@ package imagemanipulation
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"net/http"
 
@@ -39,8 +40,25 @@ func WriteWandToReader(wand *imagick.MagickWand) (io.Reader, error) {
 	return bytes.NewReader(blob), nil
 }
 
-func OptionDataToWand(inter *discordgo.Interaction, narg int) (*imagick.MagickWand, error) {
-	fileID := inter.ApplicationCommandData().Options[0].Options[narg].Value.(string)
+func OptionDataToWand(inter *discordgo.Interaction, sublayers int, namearg string) (*imagick.MagickWand, error) {
+	var opt *discordgo.ApplicationCommandInteractionDataOption
+	if sublayers == 0 {
+		opt = inter.ApplicationCommandData().GetOption(namearg)
+	} else {
+		current := inter.ApplicationCommandData().Options[0]
+		for range sublayers - 1 {
+			if current == nil || len(current.Options) < 1 {
+				return nil, errors.New("cannot unwrap all layers")
+			}
+			current = current.Options[0]
+		}
+		opt = current.GetOption(namearg)
+	}
+
+	if opt == nil {
+		return nil, errors.New("option was not specified")
+	}
+	fileID := opt.Value.(string)
 	atta := inter.ApplicationCommandData().Resolved.Attachments[fileID]
 	return ReadFromHttp(atta.ProxyURL)
 }

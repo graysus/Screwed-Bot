@@ -153,7 +153,7 @@ func screwedify(bot *botsession.BotSession, inter *discordgo.Interaction) {
 		for _, i := range slc {
 			betterSlice = append(betterSlice, "```\n"+i+"```")
 		}
-		bot.RespondWithMessage(inter, strings.Join(betterSlice, "\n"))
+		bot.RespondWithMessage(inter, strings.Join(betterSlice, ""))
 	} else if screwedified, ok := screwedMutate(inputValue); ok {
 		bot.RespondWithMessage(inter, screwedified)
 	} else {

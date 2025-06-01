@@ -49,7 +49,7 @@ func onMessage(bot *discordgo.Session, m *discordgo.MessageCreate) {
 func blah(bot *botsession.BotSession, inter *discordgo.Interaction) {
 	switch inter.ApplicationCommandData().Options[0].Name {
 	case "bambi_react":
-		wand, err := OptionDataToWand(inter, 0)
+		wand, err := OptionDataToWand(inter, 1, "shocker")
 		if err != nil {
 			fmt.Println("Error reading attachment: " + err.Error())
 			bot.RespondWithMessage(inter, "There was an error processing your request.")
@@ -76,7 +76,7 @@ func blah(bot *botsession.BotSession, inter *discordgo.Interaction) {
 		}
 
 	case "screwed_eat":
-		wand, err := OptionDataToWand(inter, 0)
+		wand, err := OptionDataToWand(inter, 1, "eating")
 		if err != nil {
 			fmt.Println("Error reading attachment: " + err.Error())
 			bot.RespondWithMessage(inter, "There was an error processing your request.")
@@ -127,7 +127,7 @@ func blah(bot *botsession.BotSession, inter *discordgo.Interaction) {
 		}
 
 	case "screwed_throw":
-		wand, err := OptionDataToWand(inter, 0)
+		wand, err := OptionDataToWand(inter, 1, "throwing")
 		if err != nil {
 			fmt.Println("Error reading attachment: " + err.Error())
 			bot.RespondWithMessage(inter, "There was an error processing your request.")
@@ -206,6 +206,7 @@ func Init(sess *botsession.BotSession) {
 						Name:        "shocker",
 						Description: "Image for Bambi to react to",
 						Type:        discordgo.ApplicationCommandOptionAttachment,
+						Required:    true,
 					},
 				},
 			},
@@ -218,6 +219,7 @@ func Init(sess *botsession.BotSession) {
 						Name:        "eating",
 						Description: "Image for bambi to go fucking devour",
 						Type:        discordgo.ApplicationCommandOptionAttachment,
+						Required:    true,
 					},
 				},
 			},
@@ -230,6 +232,7 @@ func Init(sess *botsession.BotSession) {
 						Name:        "throwing",
 						Description: "Image to throw",
 						Type:        discordgo.ApplicationCommandOptionAttachment,
+						Required:    true,
 					},
 				},
 			},
