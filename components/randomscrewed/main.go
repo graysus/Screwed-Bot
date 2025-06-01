@@ -43,6 +43,7 @@ func onMessage(sess *discordgo.Session, m *discordgo.MessageCreate) {
 
 func Init(sess *botsession.BotSession) {
 	sess.S.AddHandler(onMessage)
+	MutatorInit()
 	sess.AddAppCommand(screwedify, &discordgo.ApplicationCommand{
 		Name:        "screwedify",
 		Description: "Screwed-ify a message...",
@@ -51,6 +52,12 @@ func Init(sess *botsession.BotSession) {
 				Name:        "base",
 				Description: "The base message content",
 				Type:        discordgo.ApplicationCommandOptionString,
+				Required:    true,
+			},
+			{
+				Name:        "multiple",
+				Description: "Whether to generate MANY screws....",
+				Type:        discordgo.ApplicationCommandOptionBoolean,
 			},
 		},
 	})

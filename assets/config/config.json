@@ -1,0 +1,49 @@
+{
+    "Gifs": [
+        "https://tenor.com/view/reindeer-christmas-christmas-lights-gif-36369677951259067",
+        "https://tenor.com/view/happy-birthday-fireworks-kids-happy-birthday-kid%27s-happy-birthday-childs-happy-birthday-child%27s-happy-birthday-gif-5526442612968075893",
+        "https://tenor.com/view/friday-blessings-gif-2471068339723237230",
+        "https://tenor.com/view/happy-easter-easter-bunny-cute-easter-eggs-peek-gif-5014513786160923334",
+        "https://tenor.com/view/halloween-happy-halloween-gif-10095882963269601421"
+    ],
+    "Mutations": [
+        {
+            "Probability": 0.5,
+            "Output": "% screwed"
+        },
+        {
+            "Probability": 1.5,
+            "Output": "% in haxe"
+        },
+        {
+            "Probability": 1.5,
+            "Output": "filled %"
+        },
+        {
+            "Probability": 0.5,
+            "Output": "% in one go im praying it works"
+        },
+        {
+            "Probability": 0.20,
+            "Output": "am am says that %"
+        },
+        {
+            "Probability": 0.05,
+            "Output": "and i said \"**%**\" but nothing happened"
+        },
+        {
+            "Probability": 0.025,
+            "Output": "and i said \"**%**\" but everything happened"
+        },
+        {
+            "Probability":  0.05,
+            "Filter": "randomUpper",
+            "Output": "%"
+        },
+        {
+            "Probability":  0.25,
+            "Filter": "titleCaser",
+            "Output": "%"
+        }
+    ]
+}

@@ -14,58 +14,7 @@ type Mutator struct {
 	handler func(s string) string
 }
 
-var mutations = []Mutator{
-	{
-		weight: 0.5,
-		handler: func(s string) string {
-			return s + " screwed"
-		},
-	},
-	{
-		weight: 1.5,
-		handler: func(s string) string {
-			return s + " in haxe"
-		},
-	},
-	{
-		weight: 1.5,
-		handler: func(s string) string {
-			return "filled " + s
-		},
-	},
-	{
-		weight: 0.5,
-		handler: func(s string) string {
-			return s + " in one go im praying it works"
-		},
-	},
-	{
-		weight: 0.20,
-		handler: func(s string) string {
-			return "am am says that " + s
-		},
-	},
-	{
-		weight: 0.05,
-		handler: func(s string) string {
-			return "and i said \"**" + s + "**\" but nothing happened"
-		},
-	},
-	{
-		weight: 0.025,
-		handler: func(s string) string {
-			return "and i said \"**" + s + "**\" but everything happened"
-		},
-	},
-	{
-		weight:  0.05,
-		handler: randomUpper,
-	},
-	{
-		weight:  0.25,
-		handler: titleCaser,
-	},
-}
+var mutations = []Mutator{}
 
 func randomUpper(x string) string {
 	final := ""
@@ -120,7 +69,7 @@ func screwedIteration(x string) string {
 
 const THREADS = 12
 
-func screwAroundFindOut(m string, into chan *string) {
+func screwAroundFindOut(m string, into chan *string, multiple bool) {
 	n := 2
 	for range 1000 / THREADS {
 		current := m
@@ -129,7 +78,9 @@ func screwAroundFindOut(m string, into chan *string) {
 		}
 		if len(current) < 2000 && checkScrewed(current) {
 			into <- &current
-			return
+			if !multiple {
+				return
+			}
 		}
 		if rand.Intn(250/THREADS/n) == 1 {
 			n++
@@ -144,7 +95,7 @@ func screwedMutate(m string) (string, bool) {
 	}
 	into := make(chan *string)
 	for range THREADS {
-		go screwAroundFindOut(m, into)
+		go screwAroundFindOut(m, into, false)
 	}
 
 	failures := 0
@@ -161,15 +112,69 @@ func screwedMutate(m string) (string, bool) {
 	return "", false
 }
 
+func screwedMutateMultiple(m string) []string {
+	slc := []string{}
+	if checkScrewed(m) {
+		slc = append(slc, m)
+	}
+	into := make(chan *string)
+	for range THREADS {
+		go screwAroundFindOut(m, into, true)
+	}
+
+	finishedCount := 0
+
+	for finishedCount < THREADS {
+		x := <-into
+		if x == nil {
+			finishedCount++
+		} else {
+			slc = append(slc, *x)
+		}
+	}
+
+	return slc
+}
+
 func screwedify(bot *botsession.BotSession, inter *discordgo.Interaction) {
 	inputValue := inter.ApplicationCommandData().Options[0].StringValue()
 	if strings.Contains(inputValue, "@") {
-		bot.RespondWithMessage(inter, common.RandomChoice(common.Gifs))
+		bot.RespondWithMessage(inter, common.RandomChoice(common.Conf.Gifs))
 		return
 	}
-	if screwedified, ok := screwedMutate(inputValue); ok {
+
+	multi := false
+	if multiOpt := inter.ApplicationCommandData().GetOption("multiple"); multiOpt != nil {
+		multi = multiOpt.BoolValue()
+	}
+	if multi {
+		slc := screwedMutateMultiple(inputValue)
+		betterSlice := make([]string, len(slc))
+		for _, i := range slc {
+			betterSlice = append(betterSlice, "```\n"+i+"```")
+		}
+		bot.RespondWithMessage(inter, strings.Join(betterSlice, "\n"))
+	} else if screwedified, ok := screwedMutate(inputValue); ok {
 		bot.RespondWithMessage(inter, screwedified)
 	} else {
 		bot.RespondWithMessage(inter, "I could not find a message that is SCREWED enough...")
+	}
+}
+
+func MutatorInit() {
+	mutations = make([]Mutator, len(common.Conf.Mutations))
+	for _, i := range common.Conf.Mutations {
+		mutations = append(mutations, Mutator{
+			weight: i.Probability,
+			handler: func(s string) string {
+				switch i.Filter {
+				case "randomUpper":
+					s = randomUpper(s)
+				case "titleCaser":
+					s = titleCaser(s)
+				}
+				return strings.ReplaceAll(i.Output, "%", s)
+			},
+		})
 	}
 }
